@@ -110,6 +110,54 @@ Before you can make these decisions wisely, you must understand:
 
 **The irreversibility principle:** You cannot undo dropping rows. You cannot recover original values after imputation. Raw data understanding is prerequisite to deciding what transformations are even valid.
 
+### Sampling Bias: Understanding What Your Data Can and Cannot Claim
+
+Chip Huyen's Chapter 4 covers data collection and sampling strategies extensively. You might think: "We already have the data, so sampling isn't relevant." This is wrong.
+
+**You didn't collect the data, but someone did.** Understanding HOW they collected it determines what your model can generalize to.
+
+#### The UCI Heart Disease Sampling Reality
+
+**Who was sampled?**
+- Patients who visited these 4 specific cardiology clinics
+- People already *suspected* of heart disease (why else would they get these tests?)
+- This is **selection bias** - healthy people who never visit cardiologists aren't represented
+
+**How were they sampled?**
+- Convenience sampling (whoever happened to come to these hospitals)
+- NOT a random sample of "all people who might have heart disease"
+- NOT representative of any defined population
+
+**When were they sampled?**
+- 1980s data
+- Medical equipment, diagnostic criteria, and treatments have changed
+- Population health has changed (obesity rates, smoking rates, medication usage)
+
+#### What This Means for Your Model
+
+| Question | Implication |
+|----------|-------------|
+| Can this model generalize to a new hospital in 2024? | Uncertain - different population, different equipment, different era |
+| Who is MISSING from this data? | Healthy people, uninsured people, people who died before diagnosis, people in other countries |
+| Would Cleveland model work for Swiss patients? | The data suggests these populations differ significantly |
+| Is this a "heart disease detector" or a "1980s cardiology clinic patient classifier"? | Think carefully about this distinction |
+
+#### The Production Connection
+
+Even though you're working with historical data, ask production-minded questions:
+
+- "If I deployed this model, where would new data come from?"
+- "Would that new data be sampled the same way?"
+- "What happens when the sampling distribution shifts?"
+
+This connects directly to **Phase 6 (data drift)** - your model assumes future data looks like training data. If the underlying population or sampling method changes, your model's assumptions break.
+
+#### Key Takeaway
+
+You're not doing sampling, but you must understand what sampling was done. The question isn't "how do I collect data?" but **"what are the consequences of how this data was collected?"**
+
+This determines what your model can legitimately claim to predict.
+
 ---
 
 ## Pattern Descriptions
